@@ -9,11 +9,18 @@ import re
 import os
 import json
 from pathlib import Path
+import spacy
+from collections import Counter
+from tabulate import tabulate
+nlp = spacy.load('en_core_web_sm')
+
 def main():
-    dir = "../NLP-project/text_data/"
+    dir = "../text_data/"
     raw_text_data = read_file(dir)
     processed_text_data = preprocessing(raw_text_data)
-    print(processed_text_data['Harry Potter and the Prisoner of Azkaban'])
+    Harry_Potter_novel_1 = processed_text_data['Harry Potter and the Sorcerer Stone']
+
+
 
 def read_file(dir):
     json_file = Path('{}Raw-Harry-Potter-Series.json'.format(dir))
@@ -33,6 +40,7 @@ def read_file(dir):
                     type = chardet.detect(line)
                     line = line.decode(type["encoding"])
                     decode_text.append(line)
+
                 file_name = re.findall(pattern, file_name)[0]
                 book[file_name] = decode_text
             f_read.close()
@@ -48,42 +56,62 @@ def read_file(dir):
 
 def preprocessing(data):
     processed_data = {}
+    tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     for key in data.keys():
         text_of_book = data[key]
         pattern = r'^[¡]*'
+        new_paragraph = ''
         new_sentence = []
-        for sentence in text_of_book:
-            sentence = sentence.strip('\n')
-            sentence = re.sub(pattern, '', sentence)
-            new_sentence.append(sentence)
 
-        sentence_word_list = []
-        ##Tokenization
-        for sentence in new_sentence:
-            sentence_word_list.append(word_tokenize(sentence))
+        for paragraph in text_of_book:
+            paragraph = re.sub(pattern, '', paragraph)
+            new_paragraph += paragraph
 
-        ##Stemming
-        new_stemming_sentence_word_list = []
-        ps = PorterStemmer()
 
-        for sentence_word in sentence_word_list:
-            stemming_words = []
-            for word in sentence_word:
-                stemming_words.append(ps.stem(word))
-            new_stemming_sentence_word_list.append(stemming_words)
+        sentences = tokenizer.tokenize(new_paragraph)
+        print(sentences)
 
-        ##Lemmatization
-        new_lemmatized_sentence_word_list = []
-        lemmatizer = WordNetLemmatizer()
+        for sentence in sentences:
+            new_sentence.append(sentence.strip('\n'))
+        processed_data[key] = new_sentence
 
-        for sentence_word in new_stemming_sentence_word_list:
-            lemmatized_words = []
-            for word in sentence_word:
-                lemmatized_words.append(lemmatizer.lemmatize(word))
-            new_lemmatized_sentence_word_list.append(lemmatized_words)
-        processed_data[key] = new_lemmatized_sentence_word_list
+        # sentence_word_list = []
+        # ##Tokenization
+        # for sentence in new_sentence:
+        #     sentence_word_list.append(word_tokenize(sentence))
+        #
+        # ##Stemming
+        # new_stemming_sentence_word_list = []
+        # ps = PorterStemmer()
+        #
+        # for sentence_word in sentence_word_list:
+        #     stemming_words = []
+        #     for word in sentence_word:
+        #         stemming_words.append(ps.stem(word))
+        #     new_stemming_sentence_word_list.append(stemming_words)
+        #
+        # ##Lemmatization
+        # new_lemmatized_sentence_word_list = []
+        # lemmatizer = WordNetLemmatizer()
+        #
+        # for sentence_word in new_stemming_sentence_word_list:
+        #     lemmatized_words = []
+        #     for word in sentence_word:
+        #         lemmatized_words.append(lemmatizer.lemmatize(word))
+        #     new_lemmatized_sentence_word_list.append(lemmatized_words)
+        # processed_data[key] = new_lemmatized_sentence_word_list
 
     return processed_data
+
+
+
+
+
+
+
+
+
+
 
 
 
