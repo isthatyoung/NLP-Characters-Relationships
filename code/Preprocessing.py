@@ -13,12 +13,20 @@ import spacy
 from collections import Counter
 from tabulate import tabulate
 nlp = spacy.load('en_core_web_sm')
+import pandas as pd
 
 def main():
     dir = "../text_data/"
     raw_text_data = read_file(dir)
-    processed_text_data = preprocessing(raw_text_data)
-    Harry_Potter_novel_1 = processed_text_data['Harry Potter and the Sorcerer Stone']
+    # books = list(raw_text_data.keys())
+    data_before_token, processed_text_data = preprocessing(raw_text_data)
+    csv_file = Path(dir+'name_count.csv')
+    if not csv_file.exists():
+        name_counts = list_name_entities(data_before_token)
+        name_counts.to_csv(dir+'name_count.csv')
+    else:
+        name_counts = pd.read_csv(dir+'name_count.csv')
+
 
 
 
@@ -56,24 +64,42 @@ def read_file(dir):
 
 def preprocessing(data):
     processed_data = {}
-    tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+    data_before_token = {}
+
+    #tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+
     for key in data.keys():
         text_of_book = data[key]
         pattern = r'^[¡]*'
-        new_paragraph = ''
         new_sentence = []
 
-        for paragraph in text_of_book:
-            paragraph = re.sub(pattern, '', paragraph)
-            new_paragraph += paragraph
+        for sentence in text_of_book:
+            sentence = sentence.strip('\n')
+            sentence = sentence.strip('\r')
+            sentence = re.sub(pattern, '', sentence)
+            new_sentence.append(sentence)
 
+        data_before_token[key] = new_sentence
 
-        sentences = tokenizer.tokenize(new_paragraph)
-        print(sentences)
+        sentence_word_list = []
 
-        for sentence in sentences:
-            new_sentence.append(sentence.strip('\n'))
-        processed_data[key] = new_sentence
+        ##Tokenization
+        for sentence in new_sentence:
+            sentence_word_list.append(word_tokenize(sentence))
+
+        processed_data[key] = sentence_word_list
+
+        # for paragraph in text_of_book:
+        #     paragraph = re.sub(pattern, '', paragraph)
+        #     new_paragraph += paragraph
+        #
+        #
+        # sentences = tokenizer.tokenize(new_paragraph)
+        # print(sentences)
+        #
+        # for sentence in sentences:
+        #     new_sentence.append(sentence.strip('\n'))
+        # processed_data[key] = new_sentence
 
         # sentence_word_list = []
         # ##Tokenization
@@ -101,7 +127,24 @@ def preprocessing(data):
         #     new_lemmatized_sentence_word_list.append(lemmatized_words)
         # processed_data[key] = new_lemmatized_sentence_word_list
 
-    return processed_data
+    return data_before_token, processed_data
+
+
+def list_name_entities(data):
+    unique_name = set()
+    name_entities = []
+    for key in data.keys():
+        text = data[key]
+        for sentence in text:
+            doc = nlp(sentence)
+            for ent in doc.ents:
+                if ent.label_ == 'PERSON':
+                    unique_name.add(ent.text)
+                    name_entities.append(ent.text)
+
+    name_counts = pd.value_counts(name_entities)
+    print(name_counts)
+    return name_counts
 
 
 
@@ -110,16 +153,6 @@ def preprocessing(data):
 
 
 
-
-
-
-
-
-
-
-
-
-#test
 
 
 if __name__ == '__main__':
