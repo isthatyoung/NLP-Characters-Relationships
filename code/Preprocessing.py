@@ -14,6 +14,7 @@ from collections import Counter
 from tabulate import tabulate
 nlp = spacy.load('en_core_web_sm')
 import pandas as pd
+from pandas.core.frame import DataFrame
 
 def main():
     dir = "../text_data/"
@@ -25,7 +26,9 @@ def main():
         name_counts = list_name_entities(data_before_token)
         name_counts.to_csv(dir+'name_count.csv')
     else:
-        name_counts = pd.read_csv(dir+'name_count.csv')
+        name_counts = pd.read_csv(dir+'name_count.csv', header=None)
+    combine_entities(name_counts)
+
 
 
 
@@ -145,6 +148,35 @@ def list_name_entities(data):
     name_counts = pd.value_counts(name_entities)
     print(name_counts)
     return name_counts
+
+def combine_entities(series):
+    character_dictionary = {}
+    names = series[0].values
+    counts = series[1].values
+    length = len(names)
+    # for i in range(30):
+    #     for j in range(31,length):
+    #         if names[i] in names[j] or names[j] == names[i]+"'s" or names[j] == 'Dear ' + names[i]:
+    #             counts[i] += counts[j]
+    # new_name_counts = {"names":names, "counts":counts}
+    # new_name_counts = DataFrame(new_name_counts)
+    # print(new_name_counts)
+    f = open('../character_dictionary_data/Character_Names.txt')
+    text = f.readlines()
+    for character in text:
+        character = character.strip('\n')
+        character = character.strip('\t')
+        character_dictionary[character] = 0
+    for i in range(length):
+        for character in character_dictionary.keys():
+            if names[i] in character:
+                new_count = character_dictionary[character] + counts[i]
+                character_dictionary[character] = new_count
+    print(sorted(character_dictionary.items(), key=lambda item:item[1], reverse=True))
+
+
+
+
 
 
 
