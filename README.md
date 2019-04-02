@@ -11,3 +11,5 @@ Harry Potter Series
 ## Accomplished tasks
 * Text data collection
 * Text data preprocessing
+* Name entities extraction
+* Name entities analysis 
