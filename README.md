@@ -13,3 +13,4 @@ Harry Potter Series
 * Text data preprocessing
 * Name entities extraction
 * Name entities analysis 
+* Create dictionary for top 30 characters 
