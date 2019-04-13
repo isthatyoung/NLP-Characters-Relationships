@@ -1,3 +1,5 @@
+##TODO: Create dictionary for top 30 characters with different name entity expression
+## e.p Harry, Potter, Mr. Harry
 import pandas as pd
 
 def main():
@@ -53,7 +55,6 @@ def group_name_entities(series):
 
     print('Total amount of {} is {}.'.format(match_first_name,sum))
     f.close()
-
 
 ##TODO: After first combination, still need manual selection in .txt file.
 

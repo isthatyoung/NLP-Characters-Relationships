@@ -1,3 +1,10 @@
+##TODO: 1. Preprocessing raw data
+##      2. Format 7 novels in dictionary type
+##      3. Sentence segmentation
+##      4. Tokenization
+##      5. Find name entities
+##      6. Analyze top 30 characters by occurrence count
+
 import nltk
 from nltk.tokenize import sent_tokenize
 from nltk.tokenize import word_tokenize
@@ -20,15 +27,13 @@ def main():
     dir = "../text_data/"
     raw_text_data = read_file(dir)
     data_before_token, processed_text_data = preprocessing(raw_text_data)
+    print(processed_text_data['Harry Potter and the Sorcerer Stone'])
     csv_file = Path(dir+'name_count.csv')
     if not csv_file.exists():
         name_counts = list_name_entities(data_before_token)
         name_counts.to_csv(dir+'name_count.csv')
     else:
         name_counts = pd.read_csv(dir+'name_count.csv', header=None)
-
-
-
 
 
 def read_file(dir):
@@ -67,7 +72,7 @@ def preprocessing(data):
     processed_data = {}
     data_before_token = {}
 
-    #tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+    tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 
     for key in data.keys():
         text_of_book = data[key]
@@ -86,47 +91,11 @@ def preprocessing(data):
 
         ##Tokenization
         for sentence in new_sentence:
-            sentence_word_list.append(word_tokenize(sentence))
+            sentence = re.split('(\.|\?|\!)', sentence)
+            sentence_word_list.append(sentence)
 
         processed_data[key] = sentence_word_list
 
-        # for paragraph in text_of_book:
-        #     paragraph = re.sub(pattern, '', paragraph)
-        #     new_paragraph += paragraph
-        #
-        #
-        # sentences = tokenizer.tokenize(new_paragraph)
-        # print(sentences)
-        #
-        # for sentence in sentences:
-        #     new_sentence.append(sentence.strip('\n'))
-        # processed_data[key] = new_sentence
-
-        # sentence_word_list = []
-        # ##Tokenization
-        # for sentence in new_sentence:
-        #     sentence_word_list.append(word_tokenize(sentence))
-        #
-        # ##Stemming
-        # new_stemming_sentence_word_list = []
-        # ps = PorterStemmer()
-        #
-        # for sentence_word in sentence_word_list:
-        #     stemming_words = []
-        #     for word in sentence_word:
-        #         stemming_words.append(ps.stem(word))
-        #     new_stemming_sentence_word_list.append(stemming_words)
-        #
-        # ##Lemmatization
-        # new_lemmatized_sentence_word_list = []
-        # lemmatizer = WordNetLemmatizer()
-        #
-        # for sentence_word in new_stemming_sentence_word_list:
-        #     lemmatized_words = []
-        #     for word in sentence_word:
-        #         lemmatized_words.append(lemmatizer.lemmatize(word))
-        #     new_lemmatized_sentence_word_list.append(lemmatized_words)
-        # processed_data[key] = new_lemmatized_sentence_word_list
 
     return data_before_token, processed_data
 
