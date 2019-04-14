@@ -22,5 +22,5 @@ Harry Potter Series
 </div> 
 
 <div align="center">
-<img src="https://github.com/isthatyoung/https://github.com/isthatyoung/NLP-Characters-Relationships/blob/master/images/figure1.png" width = "640" height = "480" align=center />
+<img src="https://github.com/isthatyoung/NLP-Characters-Relationships/blob/master/images/figure2.png" width = "640" height = "480" align=center />
 </div> 
