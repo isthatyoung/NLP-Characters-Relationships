@@ -18,7 +18,7 @@ Harry Potter Series
 * Subject and object of sentences analysis
 
 <div align="center">
-<img src="https://github.com/isthatyoung/Face-emotion-recognition/blob/master/images/Figure%201.png" width = "359" height = "169" align=center />
+<img src="https://github.com/isthatyoung/NLP-Characters-Relationships/blob/master/images/figure1.png" width = "320" height = "240" align=center />
 </div> 
 
 <div align="center">
