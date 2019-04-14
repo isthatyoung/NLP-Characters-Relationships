@@ -11,6 +11,16 @@ Harry Potter Series
 ## Accomplished tasks
 * Text data collection
 * Text data preprocessing
+* Book words analysis
 * Name entities extraction
 * Name entities analysis 
 * Create dictionary for top 30 characters 
+* Subject and object of sentences analysis
+
+<div align="center">
+<img src="https://github.com/isthatyoung/NLP-Characters-Relationships/blob/master/images/figure1.png" width = "640" height = "480" align=center />
+</div> 
+
+<div align="center">
+<img src="https://github.com/isthatyoung/NLP-Characters-Relationships/blob/master/images/figure2.png" width = "640" height = "480" align=center />
+</div> 
