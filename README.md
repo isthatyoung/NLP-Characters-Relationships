@@ -16,7 +16,7 @@ Harry Potter Series
 * Name entities analysis 
 * Create dictionary for top 30 characters 
 * Subject and object of sentences analysis
-* Use NLP model word2vector to analyze the relationship between characters
+* Use NLP model **word2vector** to analyze the relationship between characters
 
 <div align="center">
 <img src="https://github.com/isthatyoung/NLP-Characters-Relationships/blob/master/images/figure1.png" width = "640" height = "480" align=center />
