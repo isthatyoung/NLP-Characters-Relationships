@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import re
+import numpy as np
 from collections import defaultdict
 def main():
     path = '../Characters_directory/'
@@ -22,7 +23,11 @@ def main():
     for i in name_entities_dictionary.values():
         for j in i:
             whole_possible_name_entities_list.append(j)
-    print(whole_possible_name_entities_list)
+
+    ##List to numpy because of efficiency
+    whole_possible_name_entities = np.array(whole_possible_name_entities_list)
+    print(whole_possible_name_entities)
+
 
 
 if __name__ == '__main__':
